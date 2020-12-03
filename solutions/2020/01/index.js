@@ -1,53 +1,57 @@
-import input from './input'
+import dedent from "dedent";
+import colors from "colors";
+import input from "./input";
 
-const getInput = () => input.split('\n').map(Number)
+const getInput = () => input.split("\n").map(Number);
 
 const twoSum = (input) => {
-  let sums = {}
+  input.sort((a, b) => a - b);
+  let right = input.length - 1;
+  let left = 0;
 
   for (let i = 0; i < input.length; i++) {
-    const lookingFor = 2020 - input[i]
+    let potentialMatch = input[right] + input[left];
 
-    if (sums[input[i]]) {
-      return input[i] * lookingFor
+    if (potentialMatch > 2020) {
+      right--;
+    } else if (potentialMatch < 2020) {
+      left++;
+    } else {
+      return input[right] * input[left];
     }
-
-    sums[lookingFor] = true
   }
-}
+};
 
-const threeSum = (nums) => {
-  nums.sort((a, b) => a - b)
+const threeSum = (input) => {
+  input.sort((a, b) => a - b);
 
-  for (let i = 0; i < nums.length; i++) {
-    let left = i + 1
-    let right = nums.length - 1
-
+  for (let i = 0; i < input.length; i++) {
+    let right = input.length - 1;
+    let left = i + 1;
     while (left < right) {
-      const sum = nums[i] + nums[left] + nums[right]
-
-      if (sum === 2020) {
-        return nums[i] * nums[left] * nums[right]
-      } else if (sum < 2020) {
-        left++
+      let potentialMatch = input[i] + input[right] + input[left];
+      if (potentialMatch > 2020) {
+        right--;
+      } else if (potentialMatch < 2020) {
+        left++;
       } else {
-        right--
+        return input[right] * input[left] * input[i];
       }
     }
   }
-}
+};
 
 const part1 = () => {
-  const input = getInput()
-  return `Multiplying the entries together gives you ${twoSum(input)}`
-}
+  const input = getInput();
+  return twoSum(input);
+};
 
 const part2 = () => {
-  const input = getInput()
-  return `Multiplying the entries together gives you ${threeSum(input)}`
-}
+  const input = getInput();
+  return threeSum(input);
+};
 
 export default {
   part1,
   part2,
-}
+};

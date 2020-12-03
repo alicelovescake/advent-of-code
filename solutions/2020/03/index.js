@@ -1,48 +1,49 @@
-import input from './input'
+import dedent from "dedent";
+import colors from "colors";
+import input from "./input";
 
-const getInput = () => input.split('\n').map((row) => row.split(''))
+const getInput = () => input.split("\n");
 
-const treeCounter = (map, slopeX, slopeY) => {
-  let x = 0
-  let trees = 0
-
-  for (let y = slopeY; y < map.length; y += slopeY) {
-    x = (x + slopeX) % map[0].length
-
-    if (map[y][x] === '#') {
-      trees++
+const run = (input) => {
+  let count = 3;
+  let trees = 0;
+  for (let i = 1; i < input.length; i++) {
+    if (input[i][count] === "#") {
+      trees++;
     }
+    count = (count + 3) % input[i].length;
   }
-
-  return trees
-}
+  return trees;
+};
+const run2 = (input, increment, yincrement) => {
+  let count = increment;
+  let trees = 0;
+  for (let i = yincrement; i < input.length; i += yincrement) {
+    if (input[i][count] === "#") {
+      trees++;
+    }
+    count = (count + increment) % input[i].length;
+  }
+  return trees;
+};
 
 const part1 = () => {
-  const input = getInput()
-  return `You would encounter ${treeCounter(input, 3, 1)} trees. 🎄`
-}
+  const input = getInput();
+  return run(input);
+};
 
 const part2 = () => {
-  const input = getInput()
-
-  let totalTrees = 1
-
-  const slopes = [
-    [1, 1],
-    [3, 1],
-    [5, 1],
-    [7, 1],
-    [1, 2],
-  ]
-
-  for (const [slopeX, slopeY] of slopes) {
-    totalTrees *= treeCounter(input, slopeX, slopeY)
-  }
-
-  return `You would encounter ${totalTrees} trees. 🎄`
-}
+  const input = getInput();
+  return (
+    run2(input, 1, 1) *
+    run2(input, 3, 1) *
+    run2(input, 5, 1) *
+    run2(input, 7, 1) *
+    run2(input, 1, 2)
+  );
+};
 
 export default {
   part1,
   part2,
-}
+};

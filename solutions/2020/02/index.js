@@ -1,59 +1,54 @@
-import input from './input'
+import dedent from "dedent";
+import colors from "colors";
+import input from "./input";
 
-const getInput = () => input.split('\n')
+const getInput = () => input.split("\n");
 
-const passwordValidator = (passwords, validate) => {
-  let validCount = 0
-
-  for (let i = 0; i < passwords.length; i++) {
-    const [_, min, max, letter, password] = passwords[i].match(
+const countPassword = (input) => {
+  let valid = 0;
+  for (let i = 0; i < input.length; i++) {
+    const [_, min, max, letter, password] = input[i].match(
       /(\d+)-(\d+) (\w)\: (\w+)/
-    )
+    );
+    let count = 0;
+    for (let l of password) {
+      if (l === letter) {
+        count++;
+      }
+    }
 
-    validCount += validate({ min, max, letter, password })
-  }
-
-  return validCount
-}
-
-const countLetters = ({ min, max, letter, password }) => {
-  let validCount = 0
-  let letterCount = 0
-
-  for (let j = 0; j < password.length; j++) {
-    if (password[j] === letter) {
-      letterCount++
+    if (count >= min && count <= max) {
+      valid++;
     }
   }
+  return valid;
+};
 
-  if (letterCount >= min && letterCount <= max) {
-    validCount++
+const countPositions = (input) => {
+  let valid = 0;
+  for (let i = 0; i < input.length; i++) {
+    const [_, min, max, letter, password] = input[i].match(
+      /(\d+)-(\d+) (\w)\: (\w+)/
+    );
+
+    if ((password[max - 1] === letter) ^ (password[min - 1] === letter)) {
+      valid++;
+    }
   }
-
-  return validCount
-}
-
-const validatePositions = ({ min, max, letter, password }) => {
-  let validCount = 0
-
-  if ((password[min - 1] === letter) ^ (password[max - 1] === letter)) {
-    validCount++
-  }
-
-  return validCount
-}
+  return valid;
+};
 
 const part1 = () => {
-  const input = getInput()
-  return passwordValidator(input, countLetters)
-}
+  const input = getInput();
+  return countPassword(input);
+};
 
 const part2 = () => {
-  const input = getInput()
-  return passwordValidator(input, validatePositions)
-}
+  const input = getInput();
+  return countPositions(input);
+};
 
 export default {
   part1,
   part2,
-}
+};
