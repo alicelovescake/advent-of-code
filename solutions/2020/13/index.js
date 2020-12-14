@@ -11,13 +11,13 @@ const run = (input) => {
   let minTime = [Infinity, 0];
   for (let i = 0; i < availableBuses.length; i++) {
     let time = timeStamp;
-
-    if (time % availableBuses[i] === 0 && time < minTime[0]) {
-      minTime = [time, availableBuses[i]];
-      console.log(minTime);
-      break;
+    while (time < timeStamp + Math.max(...availableBuses)) {
+      if (time % availableBuses[i] === 0 && time < minTime[0]) {
+        minTime = [time, availableBuses[i]];
+        break;
+      }
+      time++;
     }
-    time++;
   }
   return (minTime[0] - timeStamp) * minTime[1];
 };
