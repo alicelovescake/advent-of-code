@@ -1,19 +1,16 @@
-import dedent from 'dedent'
-import colors from 'colors'
-import input from './input'
 
-const getInput = () => input.split('').map(Number)
+import { example, data } from './input'
 
-const run = () => {}
+export const inputParser = (input) => input.split('\n')
 
-const part1 = () => {
-  const input = getInput()
-  run(input)
+const parsedData = inputParser(input)
+
+export const part1 = (input = parsedData) => {
+  return
 }
 
-const part2 = () => {
-  const input = getInput()
-  run(input)
+export const part2 = (input = parsedData) => {
+  return
 }
 
 export default {
