@@ -6,7 +6,7 @@ const dayToSolve = process.argv[3]
 
 const days = []
 const solutions = {}
-
+console.log(year, dayToSolve)
 try {
   const files = fs.readdirSync(`./solutions/${year}`)
 
@@ -20,5 +20,7 @@ try {
 days.forEach(async (day) => {
   solutions[day] = import(`./solutions/${year}/${day}/index.js`)
 })
+
+console.log(days, solutions[dayToSolve])
 
 solve(year, dayToSolve, solutions[dayToSolve])
