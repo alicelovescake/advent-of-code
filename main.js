@@ -6,7 +6,6 @@ const dayToSolve = process.argv[3]
 
 const days = []
 const solutions = {}
-console.log(year, dayToSolve)
 try {
   const files = fs.readdirSync(`./solutions/${year}`)
 
