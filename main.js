@@ -20,6 +20,4 @@ days.forEach(async (day) => {
   solutions[day] = import(`./solutions/${year}/${day}/index.js`)
 })
 
-console.log(days, solutions[dayToSolve])
-
 solve(year, dayToSolve, solutions[dayToSolve])
