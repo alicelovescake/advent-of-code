@@ -18,29 +18,29 @@ const isDiag = (coord) => {
   return Math.abs(coordA[0] - coordB[0]) === Math.abs(coordA[1] - coordB[1])
 }
 
-// coordA > || < coordB
-// x axis changing or y axis changing
-const countSteps = (totalCount, coord) => {
-  const [coordA, coordB] = coord;
-  let key = "";
-  const changingAxis = coordA[0] === coordB[0] ? 'y' : 'x'
-  const idx = coordA[0] === coordB[0] ? 1 : 0
+// // coordA > || < coordB
+// // x axis changing or y axis changing
+// const countSteps = (totalCount, coord) => {
+//   const [coordA, coordB] = coord;
+//   let key = "";
+//   const changingAxis = coordA[0] === coordB[0] ? 'y' : 'x'
+//   const idx = coordA[0] === coordB[0] ? 1 : 0
   
-  for (let i = Math.min(coordA[idx], coordB[idx]); i <= Math.max(coordA[idx], coordB[idx]); i++) {
-    if (changingAxis === "x"){
-      key = "x" + i + "y" + coordA[1]
-    } else {
-      key = "x" + coordA[0] + "y" + i
-    }
-    totalCount[key] = (totalCount[key] || 0) + 1
-  }
-}
+//   for (let i = Math.min(coordA[idx], coordB[idx]); i <= Math.max(coordA[idx], coordB[idx]); i++) {
+//     if (changingAxis === "x"){
+//       key = "x" + i + "y" + coordA[1]
+//     } else {
+//       key = "x" + coordA[0] + "y" + i
+//     }
+//     totalCount[key] = (totalCount[key] || 0) + 1
+//   }
+// }
 
-const countStepsDiag= (totalCount, coord) => {
+const countSteps= (totalCount, coord) => {
   // x + 1, y + 1 || x + 1, y - 1 || x - 1, y - 1 || x - 1, y + 1 
   // x big y big    x big  y sm     x sm y sm       x sm ybig
   const [coordA, coordB] = coord;
-  const diff = Math.abs(coordA[0] - coordB[0])  
+  const diff = coordA[0] === coordB[0] ?  Math.abs(coordA[1] - coordB[1]) : Math.abs(coordA[0] - coordB[0])
   const [xFunct, yFunct] = createComparasionFuction(coordA, coordB)
 
   for (let i = 0; i <= diff; i++) {
@@ -54,6 +54,7 @@ const countStepsDiag= (totalCount, coord) => {
 const createComparasionFuction = (coordA, coordB) => {
   const addition = (a, b) => a + b
   const subtraction = (a, b) => a - b
+  const same = (a, b) => a
   if (coordB[0] > coordA[0] && coordB[1] > coordA[1]) {
     return [addition, addition]
   } else if (coordB[0] > coordA[0] && coordB[1] < coordA[1]) {
@@ -62,7 +63,15 @@ const createComparasionFuction = (coordA, coordB) => {
     return [subtraction, subtraction]
   } else if (coordB[0] < coordA[0] && coordB[1] > coordA[1]) {
     return [subtraction, addition]
-  } 
+  } else if (coordB[0] === coordA[0] && coordB[1] > coordA[1]) {
+    return [same, addition]
+  } else if (coordB[0] === coordA[0] && coordB[1] < coordA[1]) {
+    return [same, subtraction]
+  } else if (coordB[0] < coordA[0] && coordB[1] === coordA[1]) {
+    return [subtraction, same]
+  } else if (coordB[0] > coordA[0] && coordB[1] === coordA[1]) {
+    return [addition, same]
+  }
 }
 
 const totalOverlap = (totalCount) => {
@@ -88,15 +97,10 @@ export const part1 = (input = parsedData) => {
 export const part2 = (input = parsedData) => {
   const totalCount = {}
   for (const coord of input) {
-    if (isValid(coord)) {
+    if (isValid(coord) || isDiag(coord)) {
       countSteps(totalCount, coord)
-    }
-    
-    if (isDiag(coord)) {
-      countStepsDiag(totalCount, coord)
-    }
+    } 
   }
-  console.log(totalCount)
   return totalOverlap(totalCount)
 }
 
