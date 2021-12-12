@@ -5,18 +5,19 @@ export const inputParser = (input) => input.split('\n').map((str) => str.split("
 
 const parsedData = inputParser(data)
 
+const getAbove = (input, r, c) => (r > 0 ? input[r - 1][c] : null)
+const getBelow = (input, r, c) => (r < input.length - 1 ? input[r + 1][c] : null)
+const getRight = (input, r, c) => (c < input.length - 1 ? input[r][c + 1] : null)
+const getLeft = (input, r, c) => (c > 0 ? input[r ][c - 1] : null)
+
 const isLowPoint = (input, r, c) => {
-    const left = input[r - 1] !== undefined ? input[r - 1][c] : Infinity
-    const right = input[r + 1] !== undefined ? input[r + 1][c] : Infinity
-    const top = input[r][c + 1] !== undefined ? input[r][c + 1] : Infinity
-    const bot = input[r][c - 1] !== undefined ?  input[r][c - 1] : Infinity
 
-    if (left === input[r][c] || right === input[r][c] || top === input[r][c]|| bot ===input[r][c]) {
-      return false
-    }
-    const allNums = [left, right, top, bot, input[r][c]]
+    const left = getLeft(input, r, c)
+    const right = getRight(input, r, c)
+    const top = getAbove(input, r, c)
+    const bot = getBelow(input, r, c)
 
-    return Math.min(...allNums) === input[r][c]
+    return [left, right, top, bot].every((point) => !!point || point > input[r][c])
 }
 
 const dfs = (input, r, c) => {

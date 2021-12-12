@@ -12,12 +12,6 @@ const score = {
   '>': 25137,
 }
 
-const illegalCount = {
-  ')': 0,
-  ']': 0,
-  '}': 0,
-  '>': 0,
-}
 const complement = {
   ')' : '(',
   ']' : '[',
@@ -37,34 +31,31 @@ const openBracket = {
 }
 
 
-const processSegment = (seg) => {
+const processSegment = (seg, illegalCount) => {
   const stack = []
   for (const char of seg) {
     if (char in openBracket) {
       stack.push(char)
-    } else {
-      if (!stack.length) {
-        illegalCount[char]++;
-        return;
-      } else {
-        const potientialPair = stack[stack.length - 1];
-        if (complement[char] === potientialPair) {
-          stack.pop()
-        } else {
-          illegalCount[char]++;
-          return;
-        }
-      }
-    }
+      continue;
+    } 
+    const potientialPair = stack.pop()
+    if (complement[char] !== potientialPair) {
+      illegalCount[char]++;
+      return;
+    } 
   }
   return stack
 }
 
 export const part1 = (input = parsedData) => {
-  
-
+  const illegalCount = {
+    ')': 0,
+    ']': 0,
+    '}': 0,
+    '>': 0,
+  }
   for (const seg of input) {
-    processSegment(seg)
+    processSegment(seg, illegalCount)
   }
 
   const sum = Object.keys(illegalCount).reduce(((prev, currKey) => prev + illegalCount[currKey] * score[currKey]), 0)
