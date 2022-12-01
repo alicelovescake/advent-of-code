@@ -8,9 +8,9 @@ This repo contains my solutions for the Advent of Code.
 
 2. Install dependencies
 
-    ```bash
-    yarn
-    ```
+   ```bash
+   yarn
+   ```
 
 3. Bask in the holiday cheer 🎅
 
